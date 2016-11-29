@@ -30,43 +30,26 @@ class Destination(models.Model):
         return self.name
 
 
-class PreferenceManager(models.Manager):
-    def create_preference(self, dest, score):
-        pref = self.create(destination=dest, score=score)
-        return pref
-
-
 class Preference(models.Model):
     destination = models.ForeignKey(Destination)
     score = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
-    objects = PreferenceManager()
-
-
-class UserProfileManager(models.Manager):
-    def create_profile(self, user):
-        profile = self.create(user=user)
-        return profile
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     preferences = models.ManyToManyField(Preference)
-    objects = UserProfileManager()
 
     def set_preference(self, dest_name, score):
-        is_scored_before = False
-        for pref in self.preferences.all():
-            if pref.destination.name == dest_name:
-                if score != -1:
-                    pref.score = score
-                    pref.save()
-                is_scored_before = True
-                break
-        if not is_scored_before:
+        pref = self.preferences.get(destination__name=dest_name)
+        if pref is not None:
+            if score != -1:
+                pref.score = score
+                pref.save()
+        else:
             dest = Destination.objects.get(name=dest_name)
             if score == -1:
-                new_pref = Preference.objects.create_preference(dest, 0)
+                new_pref = Preference.objects.create(destination=dest, score=0)
             else:
-                new_pref = Preference.objects.create_preference(dest, score)
+                new_pref = Preference.objects.create(destination=dest, score=score)
             self.preferences.add(new_pref)
-        self.save()
+            self.save()

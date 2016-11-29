@@ -43,7 +43,7 @@
           <ul class="nav navbar-nav navbar-right">
             {% if user is not None %}
             <li class="navbar-text">
-              Hello, {{user.first_name}}.
+              {{user.first_name}} {{user.last_name}}
             </li>
             <li>
               <a href="/logout">Sign out</a>
@@ -59,7 +59,13 @@
     </nav>
 
     <div class="container">
-
+      <ul>
+        {% for dest in rec_list %}
+        <li>
+           {{dest.name}}, {{dest.country.name}}
+        </li>
+        {% endfor %}
+      </ul>
       <hr>
 
       <footer>

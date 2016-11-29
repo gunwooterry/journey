@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile, Destination
+from .utils import recommend
 import random
 
 
@@ -29,8 +30,7 @@ def login_view(request):
 def preference_list(request):
     user = request.user
     userprofile = UserProfile.objects.get(user=user)
-    dest_list = Destination.objects.all()
-    for dest in dest_list:
+    for dest in Destination.objects.all():
         score = int(request.POST.get('rating_'+dest.name, -1))
         userprofile.set_preference(dest.name, score)
     data = {'user': user,
@@ -41,11 +41,7 @@ def preference_list(request):
 @login_required
 def recommendation_list(request):
     user = request.user
-    dest_list = Destination.objects.all()
-    recommendations = []
-    recommendations.append(random.choice(dest_list))
-    recommendations.append(random.choice(dest_list))
-    recommendations.append(random.choice(dest_list))
+    recommendations = recommend(user)
     data = {'user': user,
             'rec_list': recommendations}
     return render(request, 'recommendation.html', data)
