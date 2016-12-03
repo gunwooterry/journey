@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class Tag(models.Model):
@@ -40,7 +41,10 @@ class UserProfile(models.Model):
     preferences = models.ManyToManyField(Preference)
 
     def set_preference(self, dest_name, score):
-        pref = self.preferences.get(destination__name=dest_name)
+        try:
+            pref = self.preferences.get(destination__name=dest_name)
+        except ObjectDoesNotExist:
+            pref = None
         if pref is not None:
             if score != -1:
                 pref.score = score

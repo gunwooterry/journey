@@ -11,7 +11,7 @@
 
     <title>Rate Your Previous Trips</title>
 
-    <link href="/static/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
   </head>
 
@@ -61,6 +61,7 @@
     <div class="container">
       <div class="row">
         <div class="col-sm-6 col-sm-offset-3">
+          <h2 class="page-header">Rate your previous trips</h2>
           <div class="search-box">
               <input type="search" placeholder="Country or City" class="form-control" />
           </div>
@@ -111,7 +112,7 @@
           </div>
         </div>
         {% endfor %}
-        <button type="submit" class="btn btn-primary col-sm-2 col-sm-offset-5">Save</button>
+        <button type="submit" class="btn btn-primary col-sm-2 col-sm-offset-5" id="large-margin">Save</button>
       </form>
       <hr>
 

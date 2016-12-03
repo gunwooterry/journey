@@ -1104,6 +1104,10 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
+
+  /* for navigation bar */
+  padding-top: 50px;
+  padding-bottom: 20px;
 }
 input,
 button,
@@ -7240,6 +7244,10 @@ button.close {
   transform: translate(-50%, -50%)
 }
 
+#large-margin {
+  margin-top: 10px;
+}
+
 .demo {
   position: absolute;
   top: 50%;
@@ -7339,7 +7347,6 @@ button.close {
 }
 
 .search-box {
-  margin-top: 20%;
   background: white;
   padding: auto;
 }

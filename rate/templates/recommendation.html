@@ -11,7 +11,7 @@
 
     <title>Rate Your Previous Trips</title>
 
-    <link href="/static/style.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
   </head>
 
@@ -33,10 +33,10 @@
             <li>
               <a href="/main">Home</a>
             </li>
-            <li class="active">
+            <li>
               <a href="/rate">Rate</a>
             </li>
-            <li>
+            <li class="active">
               <a href="/recommendation">Recommendation</a>
             </li>
           </ul>
@@ -60,11 +60,30 @@
 
     <div class="container">
       <ul>
+        {% if rec_list|length == 0 %}
+        <h2 class="page-header">
+          You have visited all destinations we have! Please wait for an update.
+        </h2>
+        {% else %}
+        <div class="row">
+          <div class="col-sm-6 col-sm-offset-3">
+            <h2 class="page-header">Recommendations for you</h2>
+          </div>
+        </div>
         {% for dest in rec_list %}
-        <li>
-           {{dest.name}}, {{dest.country.name}}
-        </li>
+        <div class="row">
+          <div class="col-sm-6 col-sm-offset-3">
+            <div class="preference">
+              <h4 class="col-sm-8">
+                {{dest.name}}, {{dest.country.name}}
+              </h4>
+              <br />
+              <br />
+            </div>
+          </div>
+        </div>
         {% endfor %}
+        {% endif %}
       </ul>
       <hr>
 

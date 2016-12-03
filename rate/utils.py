@@ -1,25 +1,23 @@
 from .models import UserProfile, Tag
-from random import randint
 
 
 def recommend(user):
-    rec_num = 2     # how many recommendations
+    rec_num = 3     # how many recommendations
     userprofile = UserProfile.objects.get(user=user)
     pref_list = userprofile.preferences.all()
     tag_counter = [0]*Tag.objects.all().count()
     for pref in pref_list:
         for tag in pref.destination.tags.all():
             tag_counter[tag.tag_id-1] += pref.score
-    top_tags = [Tag.objects.get(tag_id=x+1) for x in top_k_index(tag_counter, rec_num)]
-    rec_list = []
-    for tag in top_tags:
-        dest_set = tag.destination_set.all()
-        rec = dest_set[randint(0, dest_set.count()-1)]
-        rec_list.append(rec)
+    not_visited = [pref.destination for pref in userprofile.preferences.filter(score=0)]
+    rec_list = sort_dest(not_visited, tag_counter)[:rec_num]
     return rec_list
 
 
-def top_k_index(lst, k):
-    result = list(range(len(lst)))
-    result.sort(key=lambda x: lst[x])
-    return result[:k]
+def sort_dest(dest_list, tag_counter):
+    dest_counter = [[dest, 0] for dest in dest_list]
+    for dest_pair in dest_counter:
+        for tag in dest_pair[0].tags.all():
+            dest_pair[1] += tag_counter[tag.tag_id-1]
+    dest_counter.sort(reverse=True, key=lambda x: x[1])
+    return [dest_pair[0] for dest_pair in dest_counter]
