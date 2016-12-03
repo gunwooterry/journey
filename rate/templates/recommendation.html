@@ -59,32 +59,42 @@
     </nav>
 
     <div class="container">
-      <ul>
-        {% if rec_list|length == 0 %}
-        <h2 class="page-header">
-          You have visited all destinations we have! Please wait for an update.
-        </h2>
-        {% else %}
-        <div class="row">
-          <div class="col-sm-6 col-sm-offset-3">
-            <h2 class="page-header">Recommendations for you</h2>
+      {% if rec_list|length == 0 %}
+      <h2 class="page-header">
+        You have visited all destinations we have! Please wait for an update.
+      </h2>
+      {% else %}
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+          <h2 class="page-header">Recommendations for you</h2>
+        </div>
+      </div>
+      {% for dest in rec_list %}
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+          <div class="preference">
+            <h4 class="col-sm-7">
+              {{forloop.counter}}. {{dest.name}}, {{dest.country.name}}
+            </h4>
+            <h5 class="col-sm-5 text-right">
+              {% for tag in dest.tags.all %}#{{tag.name}}{% endfor %}
+            </h5>
+            <iframe id="map_{{forloop.counter}}" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+            <script>
+            function buildUrl(place) {
+              var comma = place.split(',').map(
+                function (split) { return split.trim() }
+              ).join(',');
+              var plus = comma.split(' ').join('+');
+              return "https://www.google.com/maps/embed/v1/place?q="+plus+"&key=AIzaSyC5VCAQ2LtZYe1k8250iOUp51rz-6mCjN0"
+            }
+            document.getElementById("map_{{forloop.counter}}").src = buildUrl("{{dest.name}}, {{dest.country.name}}")
+            </script>
           </div>
         </div>
-        {% for dest in rec_list %}
-        <div class="row">
-          <div class="col-sm-6 col-sm-offset-3">
-            <div class="preference">
-              <h4 class="col-sm-8">
-                {{dest.name}}, {{dest.country.name}}
-              </h4>
-              <br />
-              <br />
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-        {% endif %}
-      </ul>
+      </div>
+      {% endfor %}
+      {% endif %}
       <hr>
 
       <footer>
