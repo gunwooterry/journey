@@ -54,7 +54,7 @@ def preference_list(request):
     pref_list = list(userprofile.preferences.all())
     pref_list.sort(key=lambda x: (x.destination.name, x.destination.country.name))
     data = {'user': user,
-            'pref_list': userprofile.preferences.all()}
+            'pref_list': pref_list}
     return render(request, 'rate.html', data)
 
 
