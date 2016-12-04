@@ -52,7 +52,7 @@ def preference_list(request):
         score = int(request.POST.get('rating_'+dest.name, -1))
         userprofile.set_preference(dest.name, score)
     pref_list = list(userprofile.preferences.all())
-    pref_list.sort(key=lambda x: (x.destination.name, x.destination.country.name))
+    pref_list.sort(key=lambda x: (x.destination.country.name, x.destination.name))
     data = {'user': user,
             'pref_list': pref_list}
     return render(request, 'rate.html', data)
