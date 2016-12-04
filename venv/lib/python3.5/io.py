@@ -1,1 +1,1 @@
-/Library/Frameworks/Python.framework/Versions/3.5/lib/python3.5/io.py
+/usr/local/lib/python3.5/io.py
