@@ -36,8 +36,8 @@ def signup_view(request):
         email = request.POST.get('email', False)
         password = request.POST.get('password', False)
         user = User.objects.create_user(username=username, password=password,
-                                        first_name=first_name, last_name=last_name,
-                                        email=email)
+                                        first_name=first_name,
+                                        last_name=last_name, email=email)
         UserProfile.objects.create(user=user)
         login(request, user)
         return redirect('/main/')
@@ -51,6 +51,8 @@ def preference_list(request):
     for dest in Destination.objects.all():
         score = int(request.POST.get('rating_'+dest.name, -1))
         userprofile.set_preference(dest.name, score)
+    pref_list = userprofile.preferences.all()
+    pref_list.sort(key=lambda x: (x.destination.name, x.destination.country.name))
     data = {'user': user,
             'pref_list': userprofile.preferences.all()}
     return render(request, 'rate.html', data)
