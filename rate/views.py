@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile, Destination
 from .utils import recommend
-import random
 
 
 def main(request):
@@ -14,7 +14,7 @@ def main(request):
     return render(request, 'main.html', data)
 
 
-def login_view(request):
+def signin_view(request):
     if request.user.is_authenticated:
         return redirect('/main/')
     username = request.POST.get('username', False)
@@ -23,7 +23,25 @@ def login_view(request):
     if user is not None:
         login(request, user)
         return redirect('/main/')
-    return render(request, 'login.html')
+    return render(request, 'signin.html')
+
+
+def signup_view(request):
+    if request.user.is_authenticated:
+        return redirect('/main/')
+    if request.method == 'POST':
+        first_name = request.POST.get('first_name', False)
+        last_name = request.POST.get('last_name', False)
+        username = request.POST.get('username', False)
+        email = request.POST.get('email', False)
+        password = request.POST.get('password', False)
+        user = User.objects.create_user(username=username, password=password,
+                                        first_name=first_name, last_name=last_name,
+                                        email=email)
+        UserProfile.objects.create(user=user)
+        login(request, user)
+        return redirect('/main/')
+    return render(request, 'signup.html')
 
 
 @login_required
