@@ -51,7 +51,7 @@ def preference_list(request):
     for dest in Destination.objects.all():
         score = int(request.POST.get('rating_'+dest.name, -1))
         userprofile.set_preference(dest.name, score)
-    pref_list = userprofile.preferences.all()
+    pref_list = list(userprofile.preferences.all())
     pref_list.sort(key=lambda x: (x.destination.name, x.destination.country.name))
     data = {'user': user,
             'pref_list': userprofile.preferences.all()}
