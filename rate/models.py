@@ -35,6 +35,9 @@ class Preference(models.Model):
     destination = models.ForeignKey(Destination)
     score = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
 
+    def __str__(self):
+        return "{} - {}".format(self.destination.name, self.score)
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
