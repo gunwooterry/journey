@@ -1,135 +1,61 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+{% extends "base.html" %}
 
-    <title>Rate Your Previous Trips</title>
+{% block title %}Rate{% endblock %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="/static/customize.css" type="text/css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
-  </head>
+{% block content %}
+<div class="row">
+  <div class="col-sm-6 col-sm-offset-3">
+    <h2 class="page-header">Rate your previous trips</h2>
+    <div class="search-box">
+        <input type="search" placeholder="Country or City" class="form-control" />
+    </div>
+  </div>
+</div>
 
-  <body>
-
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <!--a class="navbar-brand" href="#">Journey</a-->
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li>
-              <a href="/main">Home</a>
-            </li>
-            <li class="active">
-              <a href="/rate">Rate</a>
-            </li>
-            <li>
-              <a href="/recommendation">Recommendation</a>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            {% if user is not None %}
-            <li class="navbar-text">
-              {{user.first_name}} {{user.last_name}}
-            </li>
-            <li>
-              <a href="/logout">Sign out</a>
-            </li>
-            {% else %}
-            <li>
-              <a href="/login">Sign In</a>
-            </li>
-            {% endif %}
-          </ul>
+<form method="post">
+  {% csrf_token %}
+  {% for pref in pref_list %}
+  {% with pref.destination.name as dname %}
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3">
+      <div class="preference">
+        <h4 class="col-sm-7">
+          {{dname}}, {{pref.destination.country.name}}
+        </h4>
+        <fieldset class="rating col-sm-5">
+          {% if pref.score == 5 %}
+          <input type="radio" id="star5_{{dname}}" name="rating_{{dname}}" value="5" checked /><label class = "full" for="star5_{{dname}}" title="5 stars"></label>
+          {% else %}
+          <input type="radio" id="star5_{{dname}}" name="rating_{{dname}}" value="5" /><label class = "full" for="star5_{{dname}}" title="5 stars"></label>
+          {% endif %}
+          {% if pref.score == 4 %}
+          <input type="radio" id="star4_{{dname}}" name="rating_{{dname}}" value="4" checked /><label class = "full" for="star4_{{dname}}" title="4 stars"></label>
+          {% else %}
+          <input type="radio" id="star4_{{dname}}" name="rating_{{dname}}" value="4" /><label class = "full" for="star4_{{dname}}" title="4 stars"></label>
+          {% endif %}
+          {% if pref.score == 3 %}
+          <input type="radio" id="star3_{{dname}}" name="rating_{{dname}}" value="3" checked /><label class = "full" for="star3_{{dname}}" title="3 stars"></label>
+          {% else %}
+          <input type="radio" id="star3_{{dname}}" name="rating_{{dname}}" value="3" /><label class = "full" for="star3_{{dname}}" title="3 stars"></label>
+          {% endif %}
+          {% if pref.score == 2 %}
+          <input type="radio" id="star2_{{dname}}" name="rating_{{dname}}" value="2" checked /><label class = "full" for="star2_{{dname}}" title="2 stars"></label>
+          {% else %}
+          <input type="radio" id="star2_{{dname}}" name="rating_{{dname}}" value="2" /><label class = "full" for="star2_{{dname}}" title="2 stars"></label>
+          {% endif %}
+          {% if pref.score == 1 %}
+          <input type="radio" id="star1_{{dname}}" name="rating_{{dname}}" value="1" checked /><label class = "full" for="star1_{{dname}}" title="1 star"></label>
+          {% else %}
+          <input type="radio" id="star1_{{dname}}" name="rating_{{dname}}" value="1" /><label class = "full" for="star1_{{dname}}" title="1 star"></label>
+          {% endif %}
+        </fieldset>
+        {% endwith %}
+        <br />
+        <br />
       </div>
-      </div>
-    </nav>
-
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
-          <h2 class="page-header">Rate your previous trips</h2>
-          <div class="search-box">
-              <input type="search" placeholder="Country or City" class="form-control" />
-          </div>
-        </div>
-      </div>
-
-      <form method="post">
-        {% csrf_token %}
-        {% for pref in pref_list %}
-        {% with pref.destination.name as dname %}
-        <div class="row">
-          <div class="col-sm-6 col-sm-offset-3">
-            <div class="preference">
-              <h4 class="col-sm-7">
-                {{dname}}, {{pref.destination.country.name}}
-              </h4>
-              <fieldset class="rating col-sm-5">
-                {% if pref.score == 5 %}
-                <input type="radio" id="star5_{{dname}}" name="rating_{{dname}}" value="5" checked /><label class = "full" for="star5_{{dname}}" title="5 stars"></label>
-                {% else %}
-                <input type="radio" id="star5_{{dname}}" name="rating_{{dname}}" value="5" /><label class = "full" for="star5_{{dname}}" title="5 stars"></label>
-                {% endif %}
-                {% if pref.score == 4 %}
-                <input type="radio" id="star4_{{dname}}" name="rating_{{dname}}" value="4" checked /><label class = "full" for="star4_{{dname}}" title="4 stars"></label>
-                {% else %}
-                <input type="radio" id="star4_{{dname}}" name="rating_{{dname}}" value="4" /><label class = "full" for="star4_{{dname}}" title="4 stars"></label>
-                {% endif %}
-                {% if pref.score == 3 %}
-                <input type="radio" id="star3_{{dname}}" name="rating_{{dname}}" value="3" checked /><label class = "full" for="star3_{{dname}}" title="3 stars"></label>
-                {% else %}
-                <input type="radio" id="star3_{{dname}}" name="rating_{{dname}}" value="3" /><label class = "full" for="star3_{{dname}}" title="3 stars"></label>
-                {% endif %}
-                {% if pref.score == 2 %}
-                <input type="radio" id="star2_{{dname}}" name="rating_{{dname}}" value="2" checked /><label class = "full" for="star2_{{dname}}" title="2 stars"></label>
-                {% else %}
-                <input type="radio" id="star2_{{dname}}" name="rating_{{dname}}" value="2" /><label class = "full" for="star2_{{dname}}" title="2 stars"></label>
-                {% endif %}
-                {% if pref.score == 1 %}
-                <input type="radio" id="star1_{{dname}}" name="rating_{{dname}}" value="1" checked /><label class = "full" for="star1_{{dname}}" title="1 star"></label>
-                {% else %}
-                <input type="radio" id="star1_{{dname}}" name="rating_{{dname}}" value="1" /><label class = "full" for="star1_{{dname}}" title="1 star"></label>
-                {% endif %}
-              </fieldset>
-              {% endwith %}
-              <br />
-              <br />
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-        <button type="submit" class="btn btn-primary col-sm-2 col-sm-offset-5" id="large-margin">Save</button>
-      </form>
-      <hr>
-
-      <footer>
-        <p>&copy; 2016 SPARCS Newbie Project</p>
-      </footer>
-    </div> <!-- /container -->
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
+    </div>
+  </div>
+  {% endfor %}
+  <button type="submit" class="btn btn-primary col-sm-2 col-sm-offset-5" id="large-margin">Save</button>
+</form>
+{% endblock %}

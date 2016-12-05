@@ -1,115 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+{% extends "base.html" %}
 
-    <title>Rate Your Previous Trips</title>
+{% block title %}Recommendation{% endblock %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="/static/customize.css" type="text/css">
-  </head>
-
-  <body>
-
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <!--a class="navbar-brand" href="#">Journey</a-->
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li>
-              <a href="/main">Home</a>
-            </li>
-            <li>
-              <a href="/rate">Rate</a>
-            </li>
-            <li class="active">
-              <a href="/recommendation">Recommendation</a>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            {% if user is not None %}
-            <li class="navbar-text">
-              {{user.first_name}} {{user.last_name}}
-            </li>
-            <li>
-              <a href="/logout">Sign out</a>
-            </li>
-            {% else %}
-            <li>
-              <a href="/login">Sign In</a>
-            </li>
-            {% endif %}
-          </ul>
-      </div>
-      </div>
-    </nav>
-
-    <div class="container">
-      {% if rec_list|length == 0 %}
-      <h2 class="page-header">
-        You have visited all destinations we have! Please wait for an update.
-      </h2>
-      {% else %}
-      <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
-          <h2 class="page-header">Recommendations for you</h2>
-        </div>
-      </div>
-      {% for dest in rec_list %}
-      <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
-          <div class="preference">
-            <h4 class="col-sm-7">
-              {{forloop.counter}}. {{dest.name}}, {{dest.country.name}}
-            </h4>
-            <h5 class="col-sm-5 text-right">
-              {% for tag in dest.tags.all %}#{{tag.name}} {% endfor %}
-            </h5>
-            <iframe id="map_{{forloop.counter}}" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
-            <script>
-            function buildUrl(place) {
-              var comma = place.split(',').map(
-                function (split) { return split.trim() }
-              ).join(',');
-              var plus = comma.split(' ').join('+');
-              return "https://www.google.com/maps/embed/v1/place?q="+plus+"&key=AIzaSyC5VCAQ2LtZYe1k8250iOUp51rz-6mCjN0"
-            }
-            document.getElementById("map_{{forloop.counter}}").src = buildUrl("{{dest.name}}, {{dest.country.name}}")
-            </script>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-      {% endif %}
-      <hr>
-
-      <footer>
-        <p>&copy; 2016 SPARCS Newbie Project</p>
-      </footer>
-    </div> <!-- /container -->
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
+{% block content %}
+{% if rec_list|length == 0 %}
+<h2 class="page-header">
+  You have visited all destinations we have! Please wait for an update.
+</h2>
+{% else %}
+<div class="row">
+  <div class="col-sm-6 col-sm-offset-3">
+    <h2 class="page-header">Recommendations for you</h2>
+  </div>
+</div>
+{% for dest in rec_list %}
+<div class="row">
+  <div class="col-sm-6 col-sm-offset-3">
+    <div class="preference">
+      <h4 class="col-sm-7">
+        {{forloop.counter}}. {{dest.name}}, {{dest.country.name}}
+      </h4>
+      <h5 class="col-sm-5 text-right">
+        {% for tag in dest.tags.all %}#{{tag.name}} {% endfor %}
+      </h5>
+      <iframe id="map_{{forloop.counter}}" width="100%" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+      <script>
+      function buildUrl(place) {
+        var comma = place.split(',').map(
+          function (split) { return split.trim() }
+        ).join(',');
+        var plus = comma.split(' ').join('+');
+        return "https://www.google.com/maps/embed/v1/place?q="+plus+"&key=AIzaSyC5VCAQ2LtZYe1k8250iOUp51rz-6mCjN0"
+      }
+      document.getElementById("map_{{forloop.counter}}").src = buildUrl("{{dest.name}}, {{dest.country.name}}")
+      </script>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+{% endblock %}

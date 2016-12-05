@@ -1,104 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+{% extends "base.html" %}
 
-    <title>Journey</title>
+{% block title %}Journey{% endblock %}
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="/static/customize.css" type="text/css">
-  </head>
+{% block jumbotron %}
+<div class="jumbotron">
+  <div class="container">
+    <h1>Your Next Destination.</h1>
+    <p>Rate your previous trips. Journey will recommend you the next place to go.</p>
+  </div>
+</div>
+{% endblock %}
 
-  <body>
-
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <!--a class="navbar-brand" href="#">Journey</a-->
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav">
-            <li class="active">
-              <a href="/main">Home</a>
-            </li>
-            <li>
-              <a href="/rate">Rate</a>
-            </li>
-            <li>
-              <a href="/recommendation">Recommendation</a>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            {% if user is not None %}
-            <li class="navbar-text">
-              Hello, {{user.first_name}}.
-            </li>
-            <li>
-              <a href="/logout">Sign out</a>
-            </li>
-            {% else %}
-            <li>
-              <a href="/signin">Sign In</a>
-            </li>
-            <li>
-              <a href="/signup">Sign Up</a>
-            </li>
-            {% endif %}
-          </ul>
-      </div>
-      </div>
-    </nav>
-
-    <!-- Main jumbotron for a primary marketing message or call to action -->
-    <div class="jumbotron">
-      <div class="container">
-        <h1>Your Next Destination.</h1>
-        <p>Rate your previous trips. Journey will recommend you the next place to go.</p>
-      </div>
-    </div>
-
-    <div class="container">
-      <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-6">
-          <h2>Rate</h2>
-          <p>I do not know what to write here, but nobody will care what is written here. If you are reading it, thank you so much for your attention.</p>
-          <p><a class="btn btn-default" href="/rate" role="button">Rate trips &raquo;</a></p>
-        </div>
-        <div class="col-md-6">
-          <h2>Recommendation</h2>
-          <p>Still lack of idea. I am writing this bullshit for nothing. I want to be a jung-hoe-won. Please show your mercy.</p>
-          <p><a class="btn btn-default" href="/recommendation" role="button">See recommendations &raquo;</a></p>
-       </div>
-      </div>
-
-      <hr>
-
-      <footer>
-        <p>&copy; 2016 SPARCS Newbie Project</p>
-      </footer>
-    </div> <!-- /container -->
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <h2>Rate</h2>
+    <p>I do not know what to write here, but nobody will care what is written here. If you are reading it, thank you so much for your attention.</p>
+    <p><a class="btn btn-default" href="/rate" role="button">Rate trips &raquo;</a></p>
+  </div>
+  <div class="col-md-6">
+    <h2>Recommendation</h2>
+    <p>Still lack of idea. I am writing this bullshit for nothing. I want to be a jung-hoe-won. Please show your mercy.</p>
+    <p><a class="btn btn-default" href="/recommendation" role="button">See recommendations &raquo;</a></p>
+ </div>
+</div>
+{% endblock %}
